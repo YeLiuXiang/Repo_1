@@ -5,7 +5,8 @@
 # For format details, see: https://gh.io/customagents/config
 
 name: pm.specify
-description: 产品经理专属 Agent。将原始业务需求转化为结构化 Story Issue，包含完整验收标准、优先级、范围边界，并自动关联到 Projects Roadmap 视图。
+description: 产品经理专属 Agent。将原始业务需求转化为结构化 Story Issue，包含完整验收标准、优先级、范围边界，并自动在当前仓库创建 Issue。
+tools: ['github/github-mcp-server/issue_write', 'github/github-mcp-server/issue_read']
 ---
 
 # PM Specify Agent
@@ -26,6 +27,18 @@ description: 产品经理专属 Agent。将原始业务需求转化为结构化 
 - 不评估工作量或技术可行性
 
 ## 执行步骤
+
+### 0. 确认目标仓库
+
+通过以下命令获取当前仓库的 Git remote URL：
+
+```bash
+git config --get remote.origin.url
+```
+
+> [!CAUTION]
+> 只有当 remote URL 是 GitHub 仓库地址时，才继续执行后续步骤。
+> 绝对不能在与 remote URL 不匹配的仓库中创建 Issue。
 
 ### 1. 解析原始需求
 
@@ -74,12 +87,22 @@ description: 产品经理专属 Agent。将原始业务需求转化为结构化 
 `story` `priority-high` `status: planning`
 ```
 
-### 3. 自动通知
+### 3. 在仓库中创建 Story Issue
 
-Story Issue 创建后，在评论中执行以下操作：
-- @mention 架构师团队，请求进行技术可行性评估
-- 将 Issue 关联到对应的 GitHub Project Roadmap 视图
-- 建议下一步：`pm.clarify` 进行需求澄清（如有模糊点）
+使用 GitHub MCP server 在当前仓库（与 remote URL 对应）中创建 Story Issue：
+
+- **Title**：`[STORY] <一句话描述功能>`
+- **Body**：使用第 2 步生成的完整 Markdown 内容
+- **Labels**：`story`, `status: planning`，以及对应的优先级标签（如 `priority-high`）
+- **Assignees**：留空（交由项目经理在 Sprint 规划时分配）
+
+> [!CAUTION]
+> 创建前必须再次确认目标仓库与步骤 0 中的 remote URL 一致，不得在错误仓库中创建 Issue。
+
+Issue 创建成功后：
+- 在 Issue 评论中 @mention 架构师团队，请求进行技术可行性评估，并说明下一步由 `arch-plan.agent.md` 跟进
+- 告知用户已创建的 Issue 编号和链接
+- 如需求存在模糊点，提示用户可进一步调用 `pm-clarify.agent.md` 进行澄清
 
 ## 输出质量检查
 
