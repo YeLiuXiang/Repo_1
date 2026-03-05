@@ -6,7 +6,7 @@
 
 name: pm.specify
 description: 产品经理专属 Agent。将原始业务需求转化为结构化 Story Issue，包含完整验收标准、优先级、范围边界，并自动在当前仓库创建 Issue。
-tools: ['github/github-mcp-server/issue_write', 'github/github-mcp-server/issue_read']
+tools: ["read", "search", "edit","bash/edit",'github/github-mcp-server/issue_write', 'github/github-mcp-server/issue_read']
 ---
 
 # PM Specify Agent
