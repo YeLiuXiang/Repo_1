@@ -1,7 +1,7 @@
 # 📋 [Epic] 国内主流社交媒体数据采集与AI智能分析平台
 
 > **Labels**: `epic` `status: planning` `compliance: required`
-> **Priority**: 🔴 Critical
+> **Priority**: 🔴 Critical (P0 — Must Have)
 > **Milestone**: M1 (Sprint 1–2) → M2 (Sprint 3–4) → M3 (Sprint 5–6)
 
 ---
